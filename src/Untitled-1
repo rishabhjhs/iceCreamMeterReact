@@ -1,0 +1,100 @@
+import React, { Component } from "react";
+import AddUser from "./createUser/addUser";
+import { BrowserRouter, Route } from "react-router-dom";
+import { Table, Grid, Row, Col } from "react-bootstrap";
+import logo from "./logo.svg";
+
+import "./App.css";
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      users: [],
+      isLoaded: false
+    };
+  }
+
+  fetchAllUsers() {
+    fetch("http://localhost:3000/users", {
+      headers: new Headers({ "content-type": "application/json" })
+    })
+      .then(result => result.json())
+      .then(response => {
+        this.setState({ isLoaded: true, users: response.body });
+      });
+  }
+
+  componentDidMount() {
+    this.fetchAllUsers();
+  }
+
+  redirectToCreateUser = () => {
+    this.props.history.push("/users/create", { lastPageUrl: "/users" });
+  };
+
+  redirectToRedeemPoints = e => {
+    const response = fetch(
+      "http://localhost:3000/users/" + e.target.value + "/redeem",
+      {
+        method: "GET",
+        headers: new Headers({ "content-type": "application/json" })
+      }
+    )
+      .then(result => result.json())
+      .then(() => this.fetchAllUsers());
+  };
+
+  displayAllUsers() {
+    let users = this.state.users;
+    return (
+      <ul>
+        {users.map(user => (
+          <li key={user.id}>
+            <tr>
+              <td className="table-data">{user.name}</td>
+              <td className="table-data">{user.email}</td>
+              <td className="table-data">{user.counter}</td>
+              <td>
+                <button
+                  type="button"
+                  value={user.id}
+                  onClick={this.redirectToRedeemPoints}
+                >
+                  Redeem
+                </button>
+              </td>
+            </tr>
+          </li>
+        ))}
+      </ul>
+    );
+  }
+
+  // getDropList = () => {
+  //   const baseValue=0;
+  //   return (
+  //     Array.from( new Array(50), (v,i) =>
+  //       <option key={i} value={baseValue+i}>{baseValue+i}</option>
+  //     )
+  //   );
+  // };
+
+  render() {
+    var { isLoaded, users } = this.state;
+    if (!isLoaded) {
+      return <div>Loading ...</div>;
+    } else {
+      return (
+        <div className="App">
+          {this.displayAllUsers()}
+          <button type="button" onClick={this.redirectToCreateUser}>
+            Add User
+          </button>
+        </div>
+      );
+    }
+  }
+}
+
+export default App;
