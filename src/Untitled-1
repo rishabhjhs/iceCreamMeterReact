@@ -1,100 +1,116 @@
 import React, { Component } from "react";
-import AddUser from "./createUser/addUser";
-import { BrowserRouter, Route } from "react-router-dom";
-import { Table, Grid, Row, Col } from "react-bootstrap";
-import logo from "./logo.svg";
 
-import "./App.css";
-
-class App extends Component {
+export default class AddUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      users: [],
-      isLoaded: false
+      email: "",
+      name: "",
+      phone: "",
+      password: "",
+      counter: 0
     };
   }
 
-  fetchAllUsers() {
+  // Parameters are 4th Way
+  onChange = ({ target: { name, value } }) => {
+    // 1st way
+    // const name = event.target.name;
+    // const value =  event.target.value;
+
+    // 2nd Way
+    // const { target } = event;
+    // const name = target.name;
+    // const value =  target.value;
+
+    // 3rd Way
+    // const { target : { name, value } }  = event;
+
+    this.setState({ [name]: value });
+  };
+
+  getDropList = () => {
+    const baseValue = 0;
+    return Array.from(new Array(100), (v, i) => (
+      <option key={i} value={baseValue + i}>
+        {baseValue + i}
+      </option>
+    ));
+  };
+
+  onSubmit = () => {
+    const { name, password, phone, email, counter } = this.state;
+
     fetch("http://localhost:3000/users", {
-      headers: new Headers({ "content-type": "application/json" })
+      method: "POST",
+      headers: new Headers({ "content-type": "application/json" }),
+      body: JSON.stringify({
+        user: {
+          email,
+          password,
+          phone,
+          name,
+          counter
+        }
+      })
     })
-      .then(result => result.json())
-      .then(response => {
-        this.setState({ isLoaded: true, users: response.body });
-      });
-  }
-
-  componentDidMount() {
-    this.fetchAllUsers();
-  }
-
-  redirectToCreateUser = () => {
-    this.props.history.push("/users/create", { lastPageUrl: "/users" });
+      .then(request => request.json())
+      .then(response => this.props.history.push("/"));
   };
-
-  redirectToRedeemPoints = e => {
-    const response = fetch(
-      "http://localhost:3000/users/" + e.target.value + "/redeem",
-      {
-        method: "GET",
-        headers: new Headers({ "content-type": "application/json" })
-      }
-    )
-      .then(result => result.json())
-      .then(() => this.fetchAllUsers());
-  };
-
-  displayAllUsers() {
-    let users = this.state.users;
-    return (
-      <ul>
-        {users.map(user => (
-          <li key={user.id}>
-            <tr>
-              <td className="table-data">{user.name}</td>
-              <td className="table-data">{user.email}</td>
-              <td className="table-data">{user.counter}</td>
-              <td>
-                <button
-                  type="button"
-                  value={user.id}
-                  onClick={this.redirectToRedeemPoints}
-                >
-                  Redeem
-                </button>
-              </td>
-            </tr>
-          </li>
-        ))}
-      </ul>
-    );
-  }
-
-  // getDropList = () => {
-  //   const baseValue=0;
-  //   return (
-  //     Array.from( new Array(50), (v,i) =>
-  //       <option key={i} value={baseValue+i}>{baseValue+i}</option>
-  //     )
-  //   );
-  // };
 
   render() {
-    var { isLoaded, users } = this.state;
-    if (!isLoaded) {
-      return <div>Loading ...</div>;
-    } else {
-      return (
-        <div className="App">
-          {this.displayAllUsers()}
-          <button type="button" onClick={this.redirectToCreateUser}>
-            Add User
-          </button>
-        </div>
-      );
-    }
+    return (
+      <div class="form-style-5">
+      <form>
+<fieldset>
+<legend><span class="number">1</span> Candidate Info</legend>
+        <label>Email</label>
+        <input
+          type="text"
+          name="email"
+          placeholder="Email *"
+          value={this.state.email}
+          onChange={this.onChange}
+        />
+        <br />
+        <label>Name</label>
+        <input
+          type="text"
+          name="name"
+          placeholder="Name *"
+          value={this.state.name}
+          onChange={this.onChange}
+        />
+        <br />
+        <label>Phone</label>
+        <input
+          type="text"
+          name="phone"
+          value={this.state.phone}
+          onChange={this.onChange}
+        />
+        <br />
+        <label>Password</label>
+        <input
+          type="text"
+          name="password"
+          value={this.state.password}
+          onChange={this.onChange}
+        />
+        <br />
+        <label>Counter</label>
+        <select
+          name="counter"
+          value={this.state.counter}
+          onChange={this.onChange}
+        >
+          {this.getDropList()}
+        </select>
+        <br />
+        <button type="submit" onClick={this.onSubmit}>
+          Submit{" "}
+        </button>
+      </div>
+    );
   }
 }
-
-export default App;

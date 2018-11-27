@@ -29,7 +29,7 @@ export default class AddUser extends Component {
     this.setState({ [name]: value });
   };
 
-  getDropList = () => {
+  getCounterDropList = () => {
     const baseValue = 0;
     return Array.from(new Array(100), (v, i) => (
       <option key={i} value={baseValue + i}>
@@ -54,54 +54,75 @@ export default class AddUser extends Component {
         }
       })
     })
-      .then(request => request.json())
-      .then(response => this.props.history.push("/"));
+      .then(response => response.json())
+      .then(response => this.checkForError(response.body));
   };
+  checkForError(response) {
+    if (!(response === "Email already exist")) {
+      this.props.history.push("/");
+    } else {
+      alert("Email already exist");
+      this.fetchUserDetails();
+    }
+  }
 
   render() {
     return (
-      <div>
-        <label>Email</label>
-        <input
-          type="text"
-          name="email"
-          value={this.state.email}
-          onChange={this.onChange}
-        />
-        <label>Name</label>
-        <input
-          type="text"
-          name="name"
-          value={this.state.name}
-          onChange={this.onChange}
-        />
-        <label>Phone</label>
-        <input
-          type="text"
-          name="phone"
-          value={this.state.phone}
-          onChange={this.onChange}
-        />
-        <label>Password</label>
-        <input
-          type="text"
-          name="password"
-          value={this.state.password}
-          onChange={this.onChange}
-        />
-        <label>Counter</label>
-        <select
-          name="counter"
-          value={this.state.counter}
-          onChange={this.onChange}
-        >
-          {this.getDropList()}
-        </select>
+      <div className="form-style-5">
+        <form>
+          <fieldset>
+            <legend>
+              <span className="number">1</span> Employee Info
+            </legend>
+            <label>Email</label>
+            <input
+              type="text"
+              name="email"
+              placeholder="Email *"
+              value={this.state.email}
+              onChange={this.onChange}
+            />
+            <label>Name</label>
+            <input
+              type="text"
+              name="name"
+              placeholder="Name *"
+              value={this.state.name}
+              onChange={this.onChange}
+            />
+            <label>Phone</label>
+            <input
+              type="text"
+              name="phone"
+              placeholder="Phone *"
+              value={this.state.phone}
+              onChange={this.onChange}
+            />
+            <br />
+            <label>Password</label>
+            <input
+              type="text"
+              name="password"
+              placeholder="Password *"
+              value={this.state.password}
+              onChange={this.onChange}
+            />
 
-        <button type="submit" onClick={this.onSubmit}>
-          {" "}
-          Submit{" "}
-        </button>
+            <label>Counter</label>
+            <select
+              name="counter"
+              placeholder="Counter *"
+              value={this.state.counter}
+              onChange={this.onChange}
+            >
+              {this.getCounterDropList()}
+            </select>
+            <br />
+          </fieldset>
+          <button type="button" onClick={this.onSubmit}>
+            Submit{" "}
+          </button>
+        </form>
       </div>
     );
   }

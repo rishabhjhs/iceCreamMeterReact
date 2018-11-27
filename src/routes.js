@@ -2,13 +2,16 @@ import App from "./App";
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import AddUser from "./createUser/addUser";
-import ShowUser from "./showUser/showUser";
+import EditUser from "./editUser/editUser";
+
+
 
 const Router = () => (
   <Switch>
     <PrivateRoute exact path={"/"} component={App} />
     <PrivateRoute exact path={"/users/create"} component={AddUser} />
-    <privateRoute exact path={"/users/show/:id"} component={ShowUser} />
+    <PrivateRoute exact path={"/user/edit/:id"} component={EditUser} />
+    
   </Switch>
 );
 
