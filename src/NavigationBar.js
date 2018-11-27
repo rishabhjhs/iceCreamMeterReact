@@ -1,12 +1,11 @@
 import React, { Component } from "react";
 import { Navbar, Nav, NavItem, MenuItem, NavDropdown } from "react-bootstrap";
+
 export default class Header extends React.Component {
   constructor(props) {
     super(props);
   }
-  redirectToCreateUser = () => {
-    this.props.history.push("/users/create", { lastPageUrl: "/users" });
-  };
+
   render() {
     return (
       <Navbar fixedTop>

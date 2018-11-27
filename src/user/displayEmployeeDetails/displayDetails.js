@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 import { Table, Button, Row, Col } from "react-bootstrap";
 import { MdAddCircle } from "react-icons/md";
-import { getApiUrl } from "../serviceUrls";
+import { getApiUrl } from "../../serviceUrls";
 
 export default class DisplayEmployeeDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
       users: [],
-      hasError: false
+      hasError: false,
+      isLoaded: false
     };
   }
   componentDidMount() {
@@ -16,7 +17,7 @@ export default class DisplayEmployeeDetails extends Component {
   }
 
   fetchAllUsers() {
-    fetch(getApiUrl("GetEmployees"), {
+    fetch(getApiUrl("baseUrl"), {
       headers: new Headers({ "content-type": "application/json" })
     })
       .then(result => result.json())
@@ -45,7 +46,7 @@ export default class DisplayEmployeeDetails extends Component {
       currentTarget: { id, value }
     } = event;
 
-    fetch(getApiUrl("GetEmployees") + id + "/update_counter", {
+    fetch(getApiUrl("baseUrl") + id + "/update_counter", {
       method: "POST",
       headers: new Headers({ "content-type": "application/json" }),
       body: JSON.stringify({
@@ -70,7 +71,7 @@ export default class DisplayEmployeeDetails extends Component {
   };
 
   redirectToRedeemPoints = e => {
-    fetch(getApiUrl("GetEmployees") + e.currentTarget.id + "/redeem", {
+    fetch(getApiUrl("baseUrl") + e.currentTarget.id + "/redeem", {
       method: "GET",
       headers: new Headers({ "content-type": "application/json" })
     })
@@ -106,9 +107,7 @@ export default class DisplayEmployeeDetails extends Component {
               onClick={this.redirectToRedeemPoints}
             />
             &nbsp;&nbsp;
-            <a id={user.id} onClick={() => this.editUserDetails(user)}>
-              Edit
-            </a>
+            <a onClick={() => this.editUserDetails(user)}>Edit</a>
           </td>
         </tr>
       );
@@ -120,7 +119,7 @@ export default class DisplayEmployeeDetails extends Component {
   render() {
     let userHeader = [];
     let userList = [];
-    var { isLoaded } = this.state;
+    let { isLoaded } = this.state;
     if (!isLoaded) {
       return <div>Loading ...</div>;
     } else {

@@ -1,6 +1,6 @@
 export const SERVICE_URLS = (key, params) => {
     const routes = {
-        'GetEmployees':`http://localhost:3000/users/`
+        'baseUrl':`http://localhost:3000/users/`
     }
     return routes[key];
 }

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { getApiUrl } from "../../serviceUrls";
 
 export default class AddUser extends Component {
   constructor(props) {
@@ -41,7 +42,7 @@ export default class AddUser extends Component {
   onSubmit = () => {
     const { name, password, phone, email, counter } = this.state;
 
-    fetch("http://localhost:3000/users", {
+    fetch(getApiUrl("GetEmployees"), {
       method: "POST",
       headers: new Headers({ "content-type": "application/json" }),
       body: JSON.stringify({

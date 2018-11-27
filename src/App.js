@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import Header from "./NavigationBar";
-import DisplayEmployeeDetails from "./displayEmployeeDetails/displayDetails";
+import DisplayEmployeeDetails from "./user/displayEmployeeDetails/displayDetails";
 
 class App extends Component {
   constructor(props) {

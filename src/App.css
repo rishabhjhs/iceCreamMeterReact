@@ -1,5 +1,5 @@
 
-@import "./AddUser.css";
+@import "./user/createUser/AddUser.css";
 .App {
   text-align: center;
 }

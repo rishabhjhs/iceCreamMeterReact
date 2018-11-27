@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { getApiUrl } from "../serviceUrls";
+import { getApiUrl } from "../../serviceUrls";
 export default class EditUser extends Component {
   constructor(props) {
     super(props);
@@ -10,19 +10,18 @@ export default class EditUser extends Component {
     };
   }
   fetchUserDetails() {
-        const baseLocation=this.props.location.state.state
-        this.setState({
-          name: baseLocation.name,
-          email: baseLocation.email,
-          counter:baseLocation.counter
-        });
-      
+    const baseLocation = this.props.location.state.state;
+    this.setState({
+      name: baseLocation.name,
+      email: baseLocation.email,
+      counter: baseLocation.counter
+    });
   }
   onSubmit = () => {
     let id = this.props.location.pathname.split("/")[3];
     const { name, email } = this.state;
 
-    fetch("http://localhost:3000/users/" + id, {
+    fetch(getApiUrl("baseUrl") + id, {
       method: "PUT",
       headers: new Headers({ "content-type": "application/json" }),
       body: JSON.stringify({
