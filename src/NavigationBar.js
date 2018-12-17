@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { Navbar, Nav, NavItem, MenuItem, NavDropdown } from "react-bootstrap";
+import {
+  Navbar,
+  Nav
+  //  NavItem, MenuItem, NavDropdown
+} from "react-bootstrap";
 
-export default class Header extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
+export default class Header extends Component {
   render() {
     return (
       <Navbar fixedTop>
